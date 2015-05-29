@@ -18,6 +18,10 @@
 (ac-config-default)
 (ac-set-trigger-key "TAB")
 (ac-set-trigger-key "<tab>")
+(setq magit-auto-revert-mode nil)
+(setq magit-last-seen-setup-instructions "1.4.0")
+(require 'multi-term)
+(setq multi-term-program "/bin/zsh")
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -28,11 +32,20 @@
    [default bold shadow italic underline bold bold-italic bold])
  '(blink-cursor-mode nil)
  '(custom-enabled-themes (quote (tango-dark)))
+ '(global-highlight-changes-mode nil)
+ '(global-hl-line-mode t)
+ '(global-linum-mode t)
+ '(indicate-empty-lines t)
  '(js2-allow-member-expr-as-function-name t)
  '(js2-basic-offset 2)
  '(js2-build-imenu-callbacks nil)
  '(js2-include-node-externs t)
  '(menu-bar-mode nil)
+ '(nyan-animate-nyancat t)
+ '(nyan-animation-frame-interval 0.5)
+ '(nyan-bar-length 8)
+ '(nyan-mode t)
+ '(nyan-wavy-trail t)
  '(tool-bar-mode nil))
 
 (add-hook 'js2-mode-hook (lambda () (tern-mode t)))
@@ -45,4 +58,4 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- )
+ '(hl-line ((t (:inherit highlight :background "#596569" :foreground "white")))))
