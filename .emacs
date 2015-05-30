@@ -1,4 +1,3 @@
-;;; Emacs is not a package manager, and here we load its package manager!
 (require 'package)
 (dolist (source '(("elpa" . "http://elpa.gnu.org/packages/")
                   ("tromey" . "http://tromey.com/elpa/")
@@ -7,6 +6,7 @@
   (add-to-list 'package-archives source t))
 (package-initialize)
 
+(setq inhibit-startup-message t)
 (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
 (add-to-list 'interpreter-mode-alist '("node" . js2-mode))
 
@@ -22,6 +22,55 @@
 (setq magit-last-seen-setup-instructions "1.4.0")
 (require 'multi-term)
 (setq multi-term-program "/bin/zsh")
+(add-hook 'js2-mode-hook (lambda () (tern-mode t)))
+(eval-after-load 'tern
+   '(progn
+      (require 'tern-auto-complete)
+      (tern-ac-setup)))
+(electric-pair-mode 1)
+(show-paren-mode 1)
+(setq show-paren-delay 0)
+
+(highlight-parentheses-mode)
+;; show the matching paren when it is offscreen
+(defadvice show-paren-function
+      (after show-matching-paren-offscreen activate)
+      "If the matching paren is offscreen, show the matching line in the
+        echo area. Has no effect if the character before point is not of
+        the syntax class ')'."
+      (interactive)
+      (let* ((cb (char-before (point)))
+             (matching-text (and cb
+                                 (char-equal (char-syntax cb) ?\) )
+                                 (blink-matching-open))))
+        (when matching-text (message matching-text))))
+
+(desktop-save-mode 0)
+(setq desktop-path '("~/.emacs.d/tmp/"))
+(setq desktop-dirname "~/.emacs.d/tmp/")
+(setq desktop-base-file-name "~/.emacs.d/tmp/emacs-desktop")
+(setq history-length 250)
+    (add-to-list 'desktop-globals-to-save 'file-name-history)
+(setq desktop-buffers-not-to-save
+        (concat "\\("
+                "^nn\\.a[0-9]+\\|\\.log\\|(ftp)\\|^tags\\|^TAGS"
+                "\\|\\.emacs.*\\|\\.diary\\|\\.newsrc-dribble\\|\\.bbdb"
+            "\\)$"))
+   (add-to-list 'desktop-modes-not-to-save 'dired-mode)
+   (add-to-list 'desktop-modes-not-to-save 'Info-mode)
+   (add-to-list 'desktop-modes-not-to-save 'info-lookup-mode)
+   (add-to-list 'desktop-modes-not-to-save 'fundamental-mode)
+(setq desktop-restore-frames t)
+(setq desktop-restore-in-current-display t)
+(setq desktop-restore-forces-onscreen nil)
+(defun my-desktop-save ()
+    (interactive)
+    ;; Don't call desktop-save-in-desktop-dir, as it prints a message.
+    (if (eq (desktop-owner) (emacs-pid))
+        (desktop-save desktop-dirname)))
+(add-hook 'after-save-hook 'my-desktop-save)
+(add-hook 'after-init-hook 'desktop-read)
+(setq linum-format "%d ")
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -48,11 +97,6 @@
  '(nyan-wavy-trail t)
  '(tool-bar-mode nil))
 
-(add-hook 'js2-mode-hook (lambda () (tern-mode t)))
-(eval-after-load 'tern
-   '(progn
-      (require 'tern-auto-complete)
-      (tern-ac-setup)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
