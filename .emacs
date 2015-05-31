@@ -24,12 +24,14 @@
 (setq multi-term-program "/bin/zsh")
 (add-hook 'js2-mode-hook (lambda () (tern-mode t)))
 (add-hook 'js2-mode-hook (lambda () (highlight-parentheses-mode t)))
+(add-hook 'js2-mode-hook (lambda () (electric-pair-mode t)))
+(add-hook 'js2-mode-hook (lambda () (show-paren-mode t)))
+(add-hook 'js2-mode-hook (lambda () (auto-highlight-symbol-mode t)))
+(add-hook 'js2-mode-hook (lambda () (flycheck-mode t)))
 (eval-after-load 'tern
    '(progn
       (require 'tern-auto-complete)
       (tern-ac-setup)))
-(electric-pair-mode 1)
-(show-paren-mode 1)
 (setq show-paren-delay 0)
 
 ;; show the matching paren when it is offscreen
