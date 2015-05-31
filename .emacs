@@ -23,6 +23,7 @@
 (require 'multi-term)
 (setq multi-term-program "/bin/zsh")
 (add-hook 'js2-mode-hook (lambda () (tern-mode t)))
+(add-hook 'js2-mode-hook (lambda () (highlight-parentheses-mode t)))
 (eval-after-load 'tern
    '(progn
       (require 'tern-auto-complete)
@@ -31,7 +32,6 @@
 (show-paren-mode 1)
 (setq show-paren-delay 0)
 
-(highlight-parentheses-mode)
 ;; show the matching paren when it is offscreen
 (defadvice show-paren-function
       (after show-matching-paren-offscreen activate)
@@ -69,8 +69,33 @@
     (if (eq (desktop-owner) (emacs-pid))
         (desktop-save desktop-dirname)))
 (add-hook 'after-save-hook 'my-desktop-save)
+(add-hook 'auto-save-hook 'my-desktop-save)
 (add-hook 'after-init-hook 'desktop-read)
 (setq linum-format "%d ")
+
+;; flycheck
+(flycheck-def-config-file-var
+    flycheck-jscs
+    javascript-jscs
+    ".jscs"
+  :safe #'stringp)
+
+(flycheck-define-checker javascript-jscs
+  "A jscs code style checker."
+  :command ("jscs" "--reporter" "checkstyle"
+            (config-file "--config" flycheck-jscs) source)
+  :error-parser flycheck-parse-checkstyle
+  :modes (js-mode js2-mode js3-mode)
+  :next-checkers (javascript-jshint))
+
+(provide 'flycheck-jscs)
+
+(add-hook 'flycheck-mode-hook
+          (lambda()
+            ;; Re-add this when it works correctly
+            (require 'flycheck-jscs)
+            (add-to-list 'flycheck-checkers 'javascript-jscs)))
+;; flycheck end
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -86,7 +111,7 @@
  '(global-linum-mode t)
  '(indicate-empty-lines t)
  '(js2-allow-member-expr-as-function-name t)
- '(js2-basic-offset 2)
+ '(js2-basic-offset 4)
  '(js2-build-imenu-callbacks nil)
  '(js2-include-node-externs t)
  '(menu-bar-mode nil)
