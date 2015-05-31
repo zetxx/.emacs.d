@@ -20,8 +20,6 @@
 (ac-set-trigger-key "<tab>")
 (setq magit-auto-revert-mode nil)
 (setq magit-last-seen-setup-instructions "1.4.0")
-(require 'multi-term)
-(setq multi-term-program "/bin/zsh")
 (add-hook 'js2-mode-hook (lambda () (tern-mode t)))
 (add-hook 'js2-mode-hook (lambda () (highlight-parentheses-mode t)))
 (add-hook 'js2-mode-hook (lambda () (electric-pair-mode t)))
