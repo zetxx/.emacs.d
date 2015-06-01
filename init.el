@@ -101,6 +101,21 @@
             (add-to-list 'flycheck-checkers 'javascript-jscs)))
 ;; flycheck end
 
+(setq backup-each-save-mirror-location "~/.emacs.d/tmp/backup")
+(add-hook 'after-save-hook 'backup-each-save)
+(defun backup-each-save-filter (filename)
+  (let ((ignored-filenames
+   '("^/tmp" "semantic.cache$" "\\.emacs-places$"
+     "\\.recentf$" ".newsrc\\(\\.eld\\)?"))
+  (matched-ignored-filename nil))
+    (mapc
+     (lambda (x)
+       (when (string-match x filename)
+   (setq matched-ignored-filename t)))
+     ignored-filenames)
+    (not matched-ignored-filename)))
+(setq backup-each-save-filter-function 'backup-each-save-filter)
+
 (highlight-changes-mode 1)
 (set-face-foreground 'highlight-changes nil)
 (set-face-background 'highlight-changes "#382f2f")
