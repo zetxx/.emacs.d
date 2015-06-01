@@ -6,11 +6,14 @@
   (add-to-list 'package-archives source t))
 (package-initialize)
 
+(setq-default indent-tabs-mode nil)
 (global-auto-revert-mode t)
 (setq inhibit-startup-message t)
 (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
 (add-to-list 'interpreter-mode-alist '("node" . js2-mode))
 (add-to-list 'auto-mode-alist '("\\.json\\'" . json-mode))
+(add-to-list 'auto-mode-alist '("\\.json.marko\\'" . json-mode))
+(add-to-list 'auto-mode-alist '("\\.sql.marko\\'" . sql-mode))
 
 (require 'yasnippet)
 (yas-global-mode 1)
@@ -111,6 +114,22 @@
 (menu-bar-mode nil)
 (nyan-mode t)
 (tool-bar-mode nil)
+
+;; source: http://steve.yegge.googlepages.com/my-dot-emacs-file
+(defun rename-file-and-buffer (new-name)
+  "Renames both current buffer and file it's visiting to NEW-NAME."
+  (interactive "sNew name: ")
+  (let ((name (buffer-name))
+        (filename (buffer-file-name)))
+    (if (not filename)
+        (message "Buffer '%s' is not visiting a file!" name)
+      (if (get-buffer new-name)
+          (message "A buffer named '%s' already exists!" new-name)
+        (progn
+          (rename-file name new-name 1)
+          (rename-buffer new-name)
+          (set-visited-file-name new-name)
+          (set-buffer-modified-p nil))))))
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
