@@ -6,9 +6,11 @@
   (add-to-list 'package-archives source t))
 (package-initialize)
 
+(global-auto-revert-mode t)
 (setq inhibit-startup-message t)
 (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
 (add-to-list 'interpreter-mode-alist '("node" . js2-mode))
+(add-to-list 'auto-mode-alist '("\\.json\\'" . json-mode))
 
 (require 'yasnippet)
 (yas-global-mode 1)
@@ -97,6 +99,20 @@
             (add-to-list 'flycheck-checkers 'javascript-jscs)))
 ;; flycheck end
 
+(highlight-changes-mode 1)
+(set-face-foreground 'highlight-changes nil)
+(set-face-background 'highlight-changes "#382f2f")
+(set-face-foreground 'highlight-changes-delete nil)
+(set-face-underline 'highlight-changes-delete nil)
+(set-face-underline 'highlight-changes nil)
+(set-face-background 'highlight-changes-delete "#916868")
+
+(global-linum-mode t)
+(global-hl-line-mode t)
+(menu-bar-mode nil)
+(nyan-mode t)
+(tool-bar-mode nil)
+
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -106,21 +122,14 @@
    [default bold shadow italic underline bold bold-italic bold])
  '(blink-cursor-mode nil)
  '(custom-enabled-themes (quote (tango-dark)))
- '(global-highlight-changes-mode nil)
- '(global-hl-line-mode t)
- '(global-linum-mode t)
- '(indicate-empty-lines t)
  '(js2-allow-member-expr-as-function-name t)
  '(js2-basic-offset 4)
  '(js2-build-imenu-callbacks nil)
  '(js2-include-node-externs t)
- '(menu-bar-mode nil)
  '(nyan-animate-nyancat t)
  '(nyan-animation-frame-interval 0.5)
  '(nyan-bar-length 8)
- '(nyan-mode t)
- '(nyan-wavy-trail t)
- '(tool-bar-mode nil))
+ '(nyan-wavy-trail t))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
