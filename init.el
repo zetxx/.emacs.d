@@ -68,8 +68,7 @@
 (defun my-desktop-save ()
     (interactive)
     ;; Don't call desktop-save-in-desktop-dir, as it prints a message.
-    (if (eq (desktop-owner) (emacs-pid))
-        (desktop-save desktop-dirname)))
+    (desktop-save desktop-dirname))
 (add-hook 'after-save-hook 'my-desktop-save)
 (add-hook 'auto-save-hook 'my-desktop-save)
 (add-hook 'after-init-hook 'desktop-read)
