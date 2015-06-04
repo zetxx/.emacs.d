@@ -103,29 +103,34 @@
             (require 'flycheck-jscs)
             (add-to-list 'flycheck-checkers 'javascript-jscs)))
 ;; flycheck end
+;; backing up
+(setq version-control t     ;; Use version numbers for backups.
+      kept-new-versions 10  ;; Number of newest versions to keep.
+      kept-old-versions 0   ;; Number of oldest versions to keep.
+      delete-old-versions t ;; Don't ask to delete excess backup versions.
+      backup-by-copying t)  ;; Copy all files, don't rename them.
+(setq vc-make-backup-files t)
 
-(setq backup-each-save-mirror-location "~/.emacs.d/tmp/backup")
-(add-hook 'after-save-hook 'backup-each-save)
-(defun backup-each-save-filter (filename)
-  (let ((ignored-filenames
-   '("^/tmp" "semantic.cache$" "\\.emacs-places$"
-     "\\.recentf$" ".newsrc\\(\\.eld\\)?"))
-  (matched-ignored-filename nil))
-    (mapc
-     (lambda (x)
-       (when (string-match x filename)
-   (setq matched-ignored-filename t)))
-     ignored-filenames)
-    (not matched-ignored-filename)))
-(setq backup-each-save-filter-function 'backup-each-save-filter)
+;; Default and per-save backups go here:
+(setq backup-directory-alist '(("" . "~/.emacs.d/tmp/backup")))
 
-(highlight-changes-mode 1)
-(set-face-foreground 'highlight-changes nil)
-(set-face-background 'highlight-changes "#382f2f")
-(set-face-foreground 'highlight-changes-delete nil)
-(set-face-underline 'highlight-changes-delete nil)
-(set-face-underline 'highlight-changes nil)
-(set-face-background 'highlight-changes-delete "#916868")
+(defun force-backup-of-buffer ()
+  ;; Make a special "per session" backup at the first save of each
+  ;; emacs session.
+  (when (not buffer-backed-up)
+    ;; Override the default parameters for per-session backups.
+    (let ((backup-directory-alist '(("" . "~/.emacs.d/tmp/backup")))
+          (kept-new-versions 3))
+      (backup-buffer)))
+  ;; Make a "per save" backup on each save.  The first save results in
+  ;; both a per-session and a per-save backup, to keep the numbering
+  ;; of per-save backups consistent.
+  (let ((buffer-backed-up nil))
+    (backup-buffer)))
+
+(add-hook 'before-save-hook  'force-backup-of-buffer)
+;; backing up
+
 
 (global-linum-mode t)
 (global-hl-line-mode t)
@@ -151,6 +156,7 @@
 
 (projectile-global-mode)
 (setq projectile-completion-system 'grizzl)
+(setq projectile-require-project-root nil)
 
 (defvar my-keys-minor-mode-map (make-keymap) "my-keys-minor-mode keymap.")
 
@@ -169,6 +175,15 @@
 
 (add-hook 'minibuffer-setup-hook 'my-minibuffer-setup-hook)
 ;; key remap minor mode end
+;; paste and format
+(dolist (command '(yank yank-pop))
+   (eval `(defadvice ,command (after indent-region activate)
+            (and (not current-prefix-arg)
+                 (member major-mode '(js2-mode plain-tex-mode sql-mode html-mode))
+                 (let ((mark-even-if-inactive transient-mark-mode))
+                   (indent-region (region-beginning) (region-end) nil))))))
+;; paste and format
+
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -179,6 +194,7 @@
    [default bold shadow italic underline bold bold-italic bold])
  '(blink-cursor-mode nil)
  '(custom-enabled-themes (quote (tango-dark)))
+ '(global-highlight-changes-mode t)
  '(js2-allow-member-expr-as-function-name t)
  '(js2-basic-offset 4)
  '(js2-build-imenu-callbacks nil)
@@ -186,7 +202,10 @@
  '(nyan-animate-nyancat t)
  '(nyan-animation-frame-interval 0.5)
  '(nyan-bar-length 8)
- '(nyan-wavy-trail t))
+ '(nyan-wavy-trail t)
+ '(set-face-background (quote highlight-changes-delete) t)
+ '(set-face-foreground (quote highlight-changes-delete))
+ '(set-face-underline (quote highlight-changes)))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -194,4 +213,6 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(default ((t (:background nil))))
+ '(highlight-changes ((t nil)))
+ '(highlight-changes-delete ((t (:foreground "red1"))))
  '(hl-line ((t (:inherit highlight :background "#596569" :foreground "white")))))
