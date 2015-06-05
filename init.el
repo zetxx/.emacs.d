@@ -52,32 +52,10 @@
                                  (char-equal (char-syntax cb) ?\) )
                                  (blink-matching-open))))
         (when matching-text (message matching-text))))
+;; SESSION
+(add-hook 'after-init-hook 'session-initialize)
+;; SESSION END
 
-(desktop-save-mode 0)
-(setq desktop-path '("~/.emacs.d/tmp/"))
-(setq desktop-dirname "~/.emacs.d/tmp/")
-(setq desktop-base-file-name "~/.emacs.d/tmp/emacs-desktop")
-(setq history-length 250)
-    (add-to-list 'desktop-globals-to-save 'file-name-history)
-(setq desktop-buffers-not-to-save
-        (concat "\\("
-                "^nn\\.a[0-9]+\\|\\.log\\|(ftp)\\|^tags\\|^TAGS"
-                "\\|\\.emacs.*\\|\\.diary\\|\\.newsrc-dribble\\|\\.bbdb"
-            "\\)$"))
-   (add-to-list 'desktop-modes-not-to-save 'dired-mode)
-   (add-to-list 'desktop-modes-not-to-save 'Info-mode)
-   (add-to-list 'desktop-modes-not-to-save 'info-lookup-mode)
-   (add-to-list 'desktop-modes-not-to-save 'fundamental-mode)
-(setq desktop-restore-frames t)
-(setq desktop-restore-in-current-display t)
-(setq desktop-restore-forces-onscreen nil)
-(defun my-desktop-save ()
-    (interactive)
-    ;; Don't call desktop-save-in-desktop-dir, as it prints a message.
-    (desktop-save desktop-dirname))
-(add-hook 'after-save-hook 'my-desktop-save)
-(add-hook 'auto-save-hook 'my-desktop-save)
-(add-hook 'after-init-hook 'desktop-read)
 (setq linum-format "%d ")
 
 ;; flycheck
@@ -163,6 +141,7 @@
 (define-key my-keys-minor-mode-map (kbd "C-x C-f") 'projectile-find-file)
 (define-key my-keys-minor-mode-map (kbd "C-x C-d") 'projectile-find-dir)
 (define-key my-keys-minor-mode-map (kbd "C-x C-b") 'projectile-switch-to-buffer)
+(define-key my-keys-minor-mode-map (kbd "C-x p") 'projectile-switch-project)
 
 ;; key remap minor mode
 (define-minor-mode my-keys-minor-mode
@@ -194,7 +173,6 @@
    [default bold shadow italic underline bold bold-italic bold])
  '(blink-cursor-mode nil)
  '(custom-enabled-themes (quote (tango-dark)))
- '(global-highlight-changes-mode t)
  '(js2-allow-member-expr-as-function-name t)
  '(js2-basic-offset 4)
  '(js2-build-imenu-callbacks nil)
@@ -202,10 +180,7 @@
  '(nyan-animate-nyancat t)
  '(nyan-animation-frame-interval 0.5)
  '(nyan-bar-length 8)
- '(nyan-wavy-trail t)
- '(set-face-background (quote highlight-changes-delete) t)
- '(set-face-foreground (quote highlight-changes-delete))
- '(set-face-underline (quote highlight-changes)))
+ '(nyan-wavy-trail t))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -213,6 +188,4 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(default ((t (:background nil))))
- '(highlight-changes ((t nil)))
- '(highlight-changes-delete ((t (:foreground "red1"))))
  '(hl-line ((t (:inherit highlight :background "#596569" :foreground "white")))))
