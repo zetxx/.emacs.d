@@ -13,6 +13,8 @@
 (add-to-list 'interpreter-mode-alist '("node" . js2-mode))
 (add-to-list 'auto-mode-alist '("\\.json\\'" . json-mode))
 (add-to-list 'auto-mode-alist '("\\.json.marko\\'" . json-mode))
+(add-to-list 'auto-mode-alist '("\\.xml.marko\\'" . html-mode))
+(add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
 (add-to-list 'auto-mode-alist
   '("\\.sql.marko\\'" . (lambda ()
   (sql-mode)
@@ -29,6 +31,7 @@
 (setq magit-auto-revert-mode nil)
 (setq magit-last-seen-setup-instructions "1.4.0")
 (add-hook 'js2-mode-hook (lambda () (tern-mode t)))
+(add-hook 'js2-mode-hook (lambda () (js2-highlight-unused-variables-mode t)))
 (add-hook 'js2-mode-hook (lambda () (highlight-parentheses-mode t)))
 (add-hook 'js2-mode-hook (lambda () (electric-pair-mode t)))
 (add-hook 'js2-mode-hook (lambda () (show-paren-mode t)))
@@ -163,6 +166,12 @@
                    (indent-region (region-beginning) (region-end) nil))))))
 ;; paste and format
 
+(add-hook 'markdown-mode-hook
+            (lambda ()
+              (when buffer-file-name
+                (add-hook 'after-save-hook
+                          'check-parens
+                          nil t))))
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
