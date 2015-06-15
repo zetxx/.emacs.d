@@ -37,6 +37,7 @@
 (add-hook 'js2-mode-hook (lambda () (show-paren-mode t)))
 (add-hook 'js2-mode-hook (lambda () (auto-highlight-symbol-mode t)))
 (add-hook 'js2-mode-hook (lambda () (flycheck-mode t)))
+(auto-highlight-symbol-mode 1)
 (eval-after-load 'tern
    '(progn
       (require 'tern-auto-complete)
