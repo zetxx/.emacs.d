@@ -6,13 +6,18 @@
   (add-to-list 'package-archives source t))
 (package-initialize)
 
+(global-set-key "\C-d" "\C-a\C- \C-n\M-w\C-y")
+(require 'multiple-cursors)
+(global-set-key (kbd "C-f") 'mc/mark-next-like-this)
+(global-set-key (kbd "C-b") 'mc/mark-previous-like-this)
+(global-set-key (kbd "C-c C-[") 'mc/mark-all-like-this)
+
 (setq-default indent-tabs-mode nil)
 (global-auto-revert-mode t)
 (setq inhibit-startup-message t)
 (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
 (add-to-list 'interpreter-mode-alist '("node" . js2-mode))
 (add-to-list 'auto-mode-alist '("\\.json\\'" . json-mode))
-(add-to-list 'auto-mode-alist '("\\.json.marko\\'" . json-mode))
 (add-to-list 'auto-mode-alist '("\\.xml.marko\\'" . html-mode))
 (add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
 (add-to-list 'auto-mode-alist
@@ -22,6 +27,16 @@
 
 (require 'yasnippet)
 (yas-global-mode 1)
+(require 'web-mode)
+(add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
+(setq web-mode-markup-indent-offset 2)
+(define-key web-mode-map (kbd "C-n") 'web-mode-tag-next)
+
+(setq web-mode-enable-auto-pairing t)
+(setq web-mode-enable-current-element-highlight t)
+(setq web-mode-enable-current-column-highlight t)
+(setq web-mode-enable-auto-closing t)
+(setq web-mode-enable-auto-pairing t)
 
 (require 'auto-complete-config)
 (add-to-list 'ac-dictionary-directories "~/.emacs.d/ac-dict")
@@ -119,6 +134,7 @@
 (menu-bar-mode nil)
 (nyan-mode t)
 (tool-bar-mode nil)
+(wrap-region-mode t)
 
 ;; source: http://steve.yegge.googlepages.com/my-dot-emacs-file
 (defun rename-file-and-buffer (new-name)
