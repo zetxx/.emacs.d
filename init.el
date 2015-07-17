@@ -5,6 +5,8 @@
                   ))
   (add-to-list 'package-archives source t))
 (package-initialize)
+(tool-bar-mode -1)
+(menu-bar-mode -1)
 
 (global-set-key "\C-d" "\C-a\C- \C-n\M-w\C-y")
 (require 'multiple-cursors)
