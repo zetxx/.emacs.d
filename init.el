@@ -5,12 +5,15 @@
                   ))
   (add-to-list 'package-archives source t))
 (package-initialize)
+(require 'multi-term)
+(setq multi-term-program "/bin/zsh")
 
 (global-set-key "\C-d" "\C-a\C- \C-n\M-w\C-y")
 (require 'multiple-cursors)
 (global-set-key (kbd "C-f") 'mc/mark-next-like-this)
 (global-set-key (kbd "C-b") 'mc/mark-previous-like-this)
-(global-set-key (kbd "C-c C-[") 'mc/mark-all-like-this)
+(global-set-key (kbd "C-c C-a") 'mc/mark-all-like-this)
+(global-unset-key (kbd "C-z"))
 
 (setq-default indent-tabs-mode nil)
 (global-auto-revert-mode t)
