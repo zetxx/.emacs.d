@@ -5,8 +5,6 @@
                   ))
   (add-to-list 'package-archives source t))
 (package-initialize)
-(tool-bar-mode -1)
-(menu-bar-mode -1)
 
 (global-set-key "\C-d" "\C-a\C- \C-n\M-w\C-y")
 (require 'multiple-cursors)
@@ -133,9 +131,9 @@
 
 (global-linum-mode t)
 (global-hl-line-mode t)
-(menu-bar-mode nil)
+(tool-bar-mode -1)
+(menu-bar-mode -1)
 (nyan-mode t)
-(tool-bar-mode nil)
 (wrap-region-mode t)
 
 ;; source: http://steve.yegge.googlepages.com/my-dot-emacs-file
