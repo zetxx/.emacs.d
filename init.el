@@ -8,6 +8,13 @@
 (require 'multi-term)
 (setq multi-term-program "/bin/zsh")
 
+(defun toggle-comment-on-line ()
+  "comment or uncomment current line"
+  (interactive)
+  (comment-or-uncomment-region (line-beginning-position) (line-end-position)))
+(global-set-key (kbd "C-q") 'toggle-comment-on-line)
+
+
 (global-set-key "\C-d" "\C-a\C- \C-n\M-w\C-y")
 (require 'multiple-cursors)
 (global-set-key (kbd "C-f") 'mc/mark-next-like-this)
